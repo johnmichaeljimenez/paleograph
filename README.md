@@ -1,3 +1,5 @@
+## Paleograph
+
 A small local tool that recursively merges text files into a single prompt-friendly document for LLM review and self-evaluation.
 
 Paleograph packages folders of text into a single context file for LLM-assisted review.
