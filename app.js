@@ -1,4 +1,7 @@
-const rs = require('readline-sync');
+import { question } from 'readline-sync'
+import { askLLM } from 'core-common'
 
-const a = rs.question("Input: ");
-console.log(a);
+const a = question("Input: ");
+const b = await askLLM(a);
+
+console.log(b);
