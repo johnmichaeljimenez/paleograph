@@ -1,5 +1,6 @@
 import { question } from 'readline-sync'
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'fs'
+import { askLLM } from 'core-common'
 import path from 'path'
 
 const pathStr = question("Input path: ");
@@ -26,7 +27,10 @@ const validFiles = [
 
 function isFileValid(file) {
 	const fileName = file.name.toLocaleLowerCase();
-	if (fileName === "$temp.txt" || fileName === ".git" || fileName === "node_modules" || fileName === ".env" || fileName === "bin" || fileName === "obj" || fileName === "package-lock.json")
+	if (fileName === "system-prompt.txt" ||
+		fileName === "reports" || 
+		fileName === "$temp.txt" ||
+		fileName === ".git" || fileName === "node_modules" || fileName === ".env" || fileName === "bin" || fileName === "obj" || fileName === "package-lock.json")
 		return false;
 
 	if (file.isDirectory())
@@ -76,4 +80,13 @@ allFiles.forEach(file => {
 mainText += `\n\n===== FILE END =====\n\n`;
 
 writeFileSync("$temp.txt", mainText);
-console.log("File merging done!");
+
+const llmResponse = await askLLM(mainText);
+const now = new Date();
+const dateTimeString = now.toISOString()
+						.replace(/:/g, "-")
+						.replace(/\./g, "-");
+const fn = `log_${dateTimeString}.md`;
+
+writeFileSync(`./reports/${fn}`, llmResponse.response);
+console.log(`Report done! ${fn}`);
