@@ -1,0 +1,16 @@
+{
+  "name": "paleograph",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "core-common": "github:johnmichaeljimenez/core-common",
+    "readline-sync": "^1.4.10"
+  }
+}
