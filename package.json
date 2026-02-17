@@ -2,9 +2,7 @@
   "name": "paleograph",
   "version": "1.0.0",
   "main": "app.js",
-  "scripts": {
-    
-  },
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
