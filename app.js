@@ -1,5 +1,5 @@
 import { question } from 'readline-sync'
-import { existsSync, readdirSync, readFileSync } from 'fs'
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'fs'
 import path from 'path'
 
 const pathStr = question("Input path: ");
@@ -26,7 +26,7 @@ const validFiles = [
 
 function isFileValid(file) {
 	const fileName = file.name.toLocaleLowerCase();
-	if (fileName === ".git" || fileName === "node_modules" || fileName === ".env" || fileName === "bin")
+	if (fileName === "$temp.txt" || fileName === ".git" || fileName === "node_modules" || fileName === ".env" || fileName === "bin" || fileName === "obj" || fileName === "package-lock.json")
 		return false;
 
 	if (file.isDirectory())
@@ -66,9 +66,14 @@ const allFiles = getFilesRecursively(pathStr);
 console.log(allFiles);
 
 let mainText = "";
+
+mainText += `===== FILE START =====\n\n`;
 allFiles.forEach(file => {
-	let txt = `===== ${file} =====`; //readFileSync(file);
+	let txt = `===== ${file} =====\n\n`;
+	txt += readFileSync(file);
 	mainText += `${txt}\n\n`;
 });
+mainText += `\n\n===== FILE END =====\n\n`;
 
-console.log(mainText);
+writeFileSync("$temp.txt", mainText);
+console.log("File merging done!");
