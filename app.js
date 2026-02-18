@@ -1,8 +1,9 @@
-//This is Paleograph project source code (your own source code)
+//This is Paleograph project source code (your own source code).
+// This is only used as a personal local application for Windows 10 PC. No symlinks, no networked paths, just default local files.
 
 import { question } from 'readline-sync'
-import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs'
-import { askLLM } from 'core-common'
+import { existsSync, lstatSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs'
+import { askLLM } from 'core-common' //core-common's author is the same as this codebase.
 import path from 'path'
 
 const MB_SIZE = 5;
@@ -38,6 +39,7 @@ if (!existsSync(pathStr)) {
 }
 
 const realPath = path.resolve(pathStr);
+console.log(`Working on: '${realPath}'`);
 
 const validFiles = [
 	".txt",
@@ -45,14 +47,15 @@ const validFiles = [
 	".html",
 	".css",
 	".js",
-	".json"
+	".json",
 ];
 
 function isFileValid(dirent) {
 	const name = dirent.name.toLowerCase();
 	const skipDirs = new Set(
 		[
-			'system-prompt.txt', 
+			".vscode",
+			'system-prompt.txt',
 			'reports',
 			'$temp.txt',
 			'.git',
@@ -72,29 +75,32 @@ function isFileValid(dirent) {
 }
 
 function getFilesRecursively(dir, depth = 0) {
+	if (depth > MAX_DEPTH) return [];
+
 	let results = [];
+	const list = readdirSync(dir, { withFileTypes: true, followSymlinks: false })
+		.filter(isFileValid);
 
-	if (depth > MAX_DEPTH) return []; //is depth working properly here?
-
-	const list = readdirSync(dir, { withFileTypes: true, followSymlinks: false }).filter(file => {
-		return isFileValid(file);
-	});
-
-	list.forEach((dirent) => {
+	list.forEach(dirent => {
 		const fullPath = path.join(dir, dirent.name);
+		if (!fullPath.startsWith(realPath)) return;
 
 		if (dirent.isDirectory()) {
 			results = results.concat(getFilesRecursively(fullPath, depth + 1));
-		} else if (dirent.isFile()) {
+		} else {
 			results.push(fullPath);
 		}
 	});
-
 	return results;
 }
 
-const allFiles = getFilesRecursively(pathStr);
+const allFiles = getFilesRecursively(realPath);
 console.log(allFiles);
+
+if (allFiles.length == 0) {
+	console.log("Codebase does not contain valid files to evaluate");
+	process.exit(1);
+}
 
 let mainText = "";
 let totalSize = 0;
@@ -110,7 +116,7 @@ allFiles.forEach(file => {
 
 	try {
 		let txt = `===== ${file} =====\n\n`;
-		txt += readFileSync(file, 'utf8');
+		txt += readFileSync(file, { encoding: 'utf8' });
 		mainText += `${txt}\n\n`;
 
 		totalSize += stats.size;
@@ -121,7 +127,7 @@ allFiles.forEach(file => {
 
 mainText += `\n\n===== FILE END =====\n\n`;
 
-writeFileSync("$temp.txt", mainText); //leave it as-is after use
+writeFileSync("$temp.txt", mainText); //leave it as-is after use (do not delete)
 
 const llmResponse = await askLLM(mainText);
 console.log(`LLM response: ${llmResponse.tokensUsed} tokens used.`);
