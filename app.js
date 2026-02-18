@@ -48,6 +48,8 @@ const validFiles = [
 	".css",
 	".js",
 	".json",
+	".cs",
+	".csproj",
 ];
 
 function isFileValid(dirent) {
