@@ -10,6 +10,7 @@ Your job is to analyze the provided codebase snapshot and identify:
 4. Edge-case failures
 5. Structural weaknesses
 6. Code smells that may cause future problems
+7. Provide assistance when needed based on code comments (like TODO and FIXME)
 
 Important rules:
 
@@ -28,8 +29,6 @@ When reviewing:
 * Assume fatigue mistakes are possible.
 
 Output format MUST be structured exactly as follows:
-
----
 
 ## 🔴 High Risk
 
