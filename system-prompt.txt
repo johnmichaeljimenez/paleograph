@@ -88,6 +88,11 @@ List any assumptions you made about:
 * Input sources
 * Developer intent
 
+## 📝 Highlights
+
+* List any top strengths of the project and its codebase (if any)
+* Evaluate the codebase based on valuable it is for the learning developer.
+
 ---
 
 Constraints:
