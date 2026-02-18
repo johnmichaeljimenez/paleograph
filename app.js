@@ -1,3 +1,5 @@
+//This is Paleograph project source code (your own source code)
+
 import { question } from 'readline-sync'
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs'
 import { askLLM } from 'core-common'
