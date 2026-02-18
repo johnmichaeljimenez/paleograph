@@ -15,7 +15,7 @@ const reportPath = './reports';
 if (!existsSync(reportPath))
 	mkdirSync(reportPath);
 
-const pathStr = question("Input path: "); //allow anywhere
+const pathStr = question("Input path: "); //allow path selection anywhere even outside cwd
 if (!pathStr) {
 	console.error("empty");
 	process.exit(1);
@@ -74,7 +74,7 @@ function isFileValid(dirent) {
 function getFilesRecursively(dir, depth = 0) {
 	let results = [];
 
-	if (depth > MAX_DEPTH) return [];
+	if (depth > MAX_DEPTH) return []; //is depth working properly here?
 
 	const list = readdirSync(dir, { withFileTypes: true, followSymlinks: false }).filter(file => {
 		return isFileValid(file);
