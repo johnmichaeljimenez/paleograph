@@ -4,7 +4,9 @@ import { askLLM } from 'core-common'
 import path from 'path'
 
 const MB_SIZE = 5;
+const MB_TOTAL_SIZE = 10;
 const MAX_FILE_SIZE = MB_SIZE * 1024 * 1024;
+const MAX_TOTAL_FILE_SIZE = MB_TOTAL_SIZE * 1024 * 1024;
 const MAX_DEPTH = 10;
 
 const reportPath = './reports';
@@ -44,27 +46,27 @@ const validFiles = [
 	".json"
 ];
 
-function isFileValid(file) {
-	const fileName = file.name.toLocaleLowerCase();
-	if (fileName === "system-prompt.txt" ||
-		fileName === "reports" ||
-		fileName === "$temp.txt" ||
-		fileName === ".git" || fileName === "node_modules" || fileName === ".env" || fileName === "bin" || fileName === "obj" || fileName === "package-lock.json")
-		return false;
+function isFileValid(dirent) {
+	const name = dirent.name.toLowerCase();
+	const skipDirs = new Set(
+		[
+			'system-prompt.txt', 
+			'reports',
+			'$temp.txt',
+			'.git',
+			'node_modules',
+			'.env',
+			'bin',
+			'obj',
+			'package-lock.json'
+		]
+	);
 
-	if (file.isDirectory())
-		return true;
+	if (skipDirs.has(name)) return false;
+	if (dirent.isDirectory()) return true;
 
-	let valid = false;
-
-	validFiles.forEach(element => {
-		if (path.extname(fileName) === element.toLocaleLowerCase()) {
-			valid = true;
-			return;
-		}
-	});
-
-	return valid;
+	const ext = path.extname(name);
+	return validFiles.includes(ext);
 }
 
 function getFilesRecursively(dir, depth = 0) {
@@ -93,14 +95,14 @@ const allFiles = getFilesRecursively(pathStr);
 console.log(allFiles);
 
 let mainText = "";
+let totalSize = 0;
 
 mainText += `===== FILE START =====\n\n`;
 allFiles.forEach(file => {
 	const stats = statSync(file);
 
-	//TODO: add total max file size validation
-	if (stats.size > MAX_FILE_SIZE) {
-		console.log(`File '${file}' skipped (> ${MB_SIZE} MB)`);
+	if (stats.size > MAX_FILE_SIZE || totalSize + stats.size > MAX_TOTAL_FILE_SIZE) {
+		console.log(`File '${file}' skipped (file size limit)`);
 		return;
 	}
 
@@ -108,13 +110,16 @@ allFiles.forEach(file => {
 		let txt = `===== ${file} =====\n\n`;
 		txt += readFileSync(file, 'utf8');
 		mainText += `${txt}\n\n`;
+
+		totalSize += stats.size;
 	} catch (e) {
 		console.error(`File reading error (${file}): ${e.message}`);
 	}
 });
+
 mainText += `\n\n===== FILE END =====\n\n`;
 
-writeFileSync("$temp.txt", mainText);
+writeFileSync("$temp.txt", mainText); //leave it as-is after use
 
 const testMode = false;
 
