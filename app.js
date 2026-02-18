@@ -123,9 +123,7 @@ mainText += `\n\n===== FILE END =====\n\n`;
 
 writeFileSync("$temp.txt", mainText); //leave it as-is after use
 
-const testMode = false;
-
-const llmResponse = testMode ? { response: "this is a test." } : await askLLM(mainText);
+const llmResponse = await askLLM(mainText);
 console.log(`LLM response: ${llmResponse.tokensUsed} tokens used.`);
 
 writeFileSync(`${reportPath}/${reportName}.md`, llmResponse.response);
