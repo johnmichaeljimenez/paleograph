@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Paleograph</title>
+
+	<link href="styles.css" rel="stylesheet">
+</head>
+
+<body>
+	<form id="processForm">
+		<label>Target Directory:</label><br>
+		<input type="text" name="sourcePath" value="E:/Projects" required><br>
+
+		<label>Output Directory:</label><br>
+		<input type="text" name="outputPath" value="./reports" required><br><br>
+
+		<label>Custom Prompt</label><br>
+		<textarea name="customPrompt" value="" rows="8"></textarea><br><br>
+
+		<label>Whitelist Extensions (pipe separated):</label><br>
+		<input type="text" name="whitelist" value=".txt|.md"><br>
+
+		<label>Blacklist Folders (pipe separated):</label><br>
+		<input type="text" name="blacklist" value="node_modules|.git"><br><br>
+
+		<button type="submit">Run</button>
+	</form>
+
+	<script type="module" src="/script.js"></script>
+</body>
+
+</html>
