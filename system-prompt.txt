@@ -92,6 +92,7 @@ List any assumptions you made about:
 
 * List any top strengths of the project and its codebase (if any)
 * Evaluate the codebase based on valuable it is for the learning developer.
+* Give feedback if it's good as an experimental project, a portfolio project, or even a production-grade solo project that only needs polishing.
 
 ---
 
