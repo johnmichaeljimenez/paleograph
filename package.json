@@ -10,6 +10,7 @@
   "description": "",
   "dependencies": {
     "core-common": "github:johnmichaeljimenez/core-common",
+    "express": "^5.2.1",
     "readline-sync": "^1.4.10"
   }
 }
