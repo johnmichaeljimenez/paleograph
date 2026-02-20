@@ -39,12 +39,12 @@ form.addEventListener('submit', async (event) => {
 
 			const a = document.createElement('a');
 			a.href = url;
-			a.download = 'report.md';
+			a.download = data.outputPath;
 			document.body.appendChild(a);
 			a.click();
 			document.body.removeChild(a);
 			URL.revokeObjectURL(url);
-			
+
 		} else {
 			console.error('Error downloading the file');
 		}

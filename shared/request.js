@@ -1,6 +1,6 @@
 const template = {
 	"sourcePath": "",
-	"outputPath": "./reports",
+	"outputPath": "report.md",
 
 	// "tag": "web development",
 	"customPrompt": "",

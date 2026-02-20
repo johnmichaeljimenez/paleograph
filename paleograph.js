@@ -55,7 +55,7 @@ async function processFiles(req) {
 
 	writeFileSync("$temp.txt", mainText); //leave it as-is after use for now (do not delete)
 
-	const llmResponse = { "response": "test", tokensUsed: -1 };// await askLLM(mainText);
+	const llmResponse = await askLLM(mainText);
 	console.log(`LLM response: ${llmResponse.tokensUsed} tokens used.`);
 	return llmResponse.response;
 }
