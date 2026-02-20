@@ -11,6 +11,13 @@ const MAX_FILE_SIZE = MB_SIZE * 1024 * 1024;
 const MAX_TOTAL_FILE_SIZE = MB_TOTAL_SIZE * 1024 * 1024;
 const MAX_DEPTH = 10;
 
+function getTokenCost(llmResponse) {
+	const totalTokens = llmResponse.tokensUsed || 0;
+	const blendedRatePerMillion = 0.275;
+
+	return (totalTokens / 1000000) * blendedRatePerMillion;
+}
+
 async function processFiles(req) {
 	const realPath = path.resolve(req.sourcePath);
 	console.log(`Working on: '${realPath}'`);
@@ -56,7 +63,7 @@ async function processFiles(req) {
 	writeFileSync("$temp.txt", mainText); //leave it as-is after use for now (do not delete)
 
 	const llmResponse = await askLLM(mainText);
-	console.log(`LLM response: ${llmResponse.tokensUsed} tokens used.`);
+	console.log(`LLM response: ${llmResponse.tokensUsed} tokens used. (~$${getTokenCost(llmResponse).toFixed(6)})`);
 	return llmResponse.response;
 }
 
