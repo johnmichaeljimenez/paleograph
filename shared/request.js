@@ -1,7 +1,7 @@
 const template = {
 	"sourcePath": "",
-	"outputPath": "",
-	
+	"outputPath": "./reports",
+
 	// "tag": "web development",
 	"customPrompt": "",
 
@@ -17,18 +17,45 @@ const template = {
 	],
 
 	"blacklist": [
-		".vscode",
 		'reports',
 		'$temp.txt',
+	]
+}
+
+export function newRequest() {
+	return structuredClone(template);
+}
+
+export function validateRequest(req) {
+	req = { ...newRequest(), ...req };
+
+	if (typeof req.whitelist === "string") {
+		req.whitelist = req.whitelist
+			.split("|")
+			.map(item => item.trim())
+			.filter(Boolean);
+	}
+
+	if (typeof req.blacklist === "string") {
+		req.blacklist = req.blacklist
+			.split("|")
+			.map(item => item.trim())
+			.filter(Boolean);
+	}
+
+	const mandatoryBlacklist = [
+		".vscode",
 		'.git',
 		'node_modules',
 		'.env',
 		'bin',
 		'obj',
 		'package-lock.json'
-	]
-}
+	];
 
-export function newTemplate() {
-	return structuredClone(template);
+	req.blacklist = [
+		...new Set([...req.blacklist, ...mandatoryBlacklist])
+	];
+
+	return req;
 }
