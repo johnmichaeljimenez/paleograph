@@ -20,9 +20,12 @@ app.get('/', (req, res) => {
 
 app.post('/api/process', async (req, res) => {
   const request = validateRequest(req.body);
-  // console.log(request);
-  await processFiles(request);
-  res.send({ 'status': 'OK' });
+  const reportContent = await processFiles(request);
+  
+  res.setHeader('Content-Disposition', `attachment; filename=${request.outputPath}.md`);
+  res.setHeader('Content-Type', 'text/markdown');
+
+  res.send(reportContent);
 });
 
 app.listen(PORT, '127.0.0.1', () => {

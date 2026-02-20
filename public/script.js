@@ -32,6 +32,22 @@ form.addEventListener('submit', async (event) => {
 			},
 			body: JSON.stringify(data)
 		});
+
+		if (response.ok) {
+			const blob = await response.blob();
+			const url = URL.createObjectURL(blob);
+
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = 'report.md';
+			document.body.appendChild(a);
+			a.click();
+			document.body.removeChild(a);
+			URL.revokeObjectURL(url);
+			
+		} else {
+			console.error('Error downloading the file');
+		}
 	} catch (ex) {
 
 	} finally {
