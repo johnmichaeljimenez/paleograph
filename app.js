@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { newTemplate } from './shared/request.js';
+import { newRequest, validateRequest } from './shared/request.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/process', async (req, res) => {
-  const request = { ...newTemplate(), ...req.body };
+  const request = validateRequest(req.body);
   console.log(request);
 
   res.send({ 'status': 'OK' });
