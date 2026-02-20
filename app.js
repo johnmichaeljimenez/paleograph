@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { newRequest, validateRequest } from './shared/request.js';
+import { processFiles } from './paleograph.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,8 +20,8 @@ app.get('/', (req, res) => {
 
 app.post('/api/process', async (req, res) => {
   const request = validateRequest(req.body);
-  console.log(request);
-
+  // console.log(request);
+  await processFiles(request);
   res.send({ 'status': 'OK' });
 });
 
