@@ -49,7 +49,7 @@ form.addEventListener('submit', async (event) => {
 			console.error('Error downloading the file');
 		}
 	} catch (ex) {
-
+		console.error(`Error: ${ex}`);
 	} finally {
 		form.style.display = "block";
 	}

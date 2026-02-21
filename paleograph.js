@@ -23,16 +23,14 @@ async function processFiles(req) {
 	console.log(`Working on: '${realPath}'`);
 
 	if (!realPath || !existsSync(realPath)) {
-		console.error("invalid path");
-		return;
+		throw new Error("Invalid path");
 	}
 
 	const allFiles = getFilesRecursively(realPath, realPath, req.blacklist, req.whitelist);
 	console.log(allFiles);
 
 	if (allFiles.length == 0) {
-		console.error("File list does not contain valid files to evaluate");
-		return;
+		throw new Error("File list does not contain valid files to evaluate");
 	}
 
 	let mainText = "";
