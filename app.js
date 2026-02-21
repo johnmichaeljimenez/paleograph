@@ -21,12 +21,14 @@ app.get('/', (req, res) => {
 app.post('/api/process', async (req, res) => {
   try {
     const request = validateRequest(req.body);
-    const reportContent = await processFiles(request);
+    console.log(request);
 
-    res.setHeader('Content-Disposition', `attachment; filename=${request.outputPath}.md`);
-    res.setHeader('Content-Type', 'text/markdown');
+    const report = await processFiles(request);
+    res.json({
+      fileName: request.outputPath,
+      report: report
+    });
 
-    res.send(reportContent);
   } catch (error) {
     res.status(500).send({ "Error": error });
   }

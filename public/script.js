@@ -22,6 +22,9 @@ form.addEventListener('submit', async (event) => {
 
 	const formData = new FormData(form);
 	const data = validateRequest({ ...Object.fromEntries(formData.entries()) });
+	data.dryRun = form.elements.dryRun.checked;
+
+	console.log(data);
 
 	try {
 		form.style.display = "none";
@@ -34,17 +37,21 @@ form.addEventListener('submit', async (event) => {
 		});
 
 		if (response.ok) {
-			const blob = await response.blob();
-			const url = URL.createObjectURL(blob);
+			const jsonResponse = await response.json();
+			console.log(jsonResponse);
 
-			const a = document.createElement('a');
-			a.href = url;
-			a.download = data.outputPath;
-			document.body.appendChild(a);
-			a.click();
-			document.body.removeChild(a);
-			URL.revokeObjectURL(url);
+			if (!data.dryRun) {
+				const blob = new Blob([jsonResponse.report.content], { type: 'text/plain;charset=utf-8' });
+				const url = URL.createObjectURL(blob);
 
+				const a = document.createElement('a');
+				a.href = url;
+				a.download = jsonResponse.fileName;
+				document.body.appendChild(a);
+				a.click();
+				document.body.removeChild(a);
+				URL.revokeObjectURL(url);
+			}
 		} else {
 			console.error('Error downloading the file');
 		}

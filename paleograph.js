@@ -60,9 +60,19 @@ async function processFiles(req) {
 
 	writeFileSync("$temp.txt", mainText); //leave it as-is after use for now (do not delete)
 
-	const llmResponse = await askLLM(mainText);
+	const llmResponse = req.dryRun ? {
+		response: ""
+	} : await askLLM(mainText);
+
 	console.log(`LLM response: ${llmResponse.tokensUsed} tokens used. (~$${getTokenCost(llmResponse).toFixed(6)})`);
-	return llmResponse.response;
+
+	return {
+		fileList: allFiles,
+		inputFile: mainText,
+		content: llmResponse.response,
+		tokenCount: req.dryRun? 0 : llmResponse.tokensUsed,
+		tokenCost: req.dryRun? 0 : getTokenCost(llmResponse).toFixed(6)
+	};
 }
 
 function isFileValid(dirent, skipDirs, validFiles) {

@@ -1,8 +1,7 @@
 const template = {
 	"sourcePath": "",
 	"outputPath": "report.md",
-
-	// "tag": "web development",
+	"dryRun": false,
 	"customPrompt": "",
 
 	"whitelist": [
@@ -19,6 +18,7 @@ const template = {
 	"blacklist": [
 		'reports',
 		'$temp.txt',
+		'system-prompt.txt'
 	]
 }
 
