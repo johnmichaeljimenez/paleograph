@@ -40,6 +40,14 @@ form.addEventListener('submit', async (event) => {
 			const jsonResponse = await response.json();
 			console.log(jsonResponse);
 
+			const fileList = document.getElementById("fileList");
+			fileList.innerHTML = "";
+			jsonResponse.report.fileList.forEach(file => {
+				const li = document.createElement("li");
+				li.textContent = file;
+				fileList.appendChild(li);
+			});
+
 			if (!data.dryRun) {
 				const blob = new Blob([jsonResponse.report.content], { type: 'text/plain;charset=utf-8' });
 				const url = URL.createObjectURL(blob);
