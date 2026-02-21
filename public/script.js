@@ -48,6 +48,9 @@ form.addEventListener('submit', async (event) => {
 				fileList.appendChild(li);
 			});
 
+			const blobFile = document.getElementById("blobFile");
+			blobFile.textContent = jsonResponse.report.inputFile;
+
 			if (!data.dryRun) {
 				const blob = new Blob([jsonResponse.report.content], { type: 'text/plain;charset=utf-8' });
 				const url = URL.createObjectURL(blob);
