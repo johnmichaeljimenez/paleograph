@@ -58,8 +58,6 @@ async function processFiles(req) {
 
 	mainText += `\n\n===== FILE END =====\n\n`;
 
-	writeFileSync("$temp.txt", mainText); //leave it as-is after use for now (do not delete)
-
 	const llmResponse = req.dryRun ? {
 		response: ""
 	} : await askLLM(mainText);
