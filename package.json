@@ -3,14 +3,15 @@
   "version": "1.0.0",
   "main": "app.js",
   "type": "module",
-  "scripts": {},
+  "scripts": {
+    "start": "nodemon app.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "core-common": "github:johnmichaeljimenez/core-common",
-    "express": "^5.2.1",
-    "readline-sync": "^1.4.10"
+    "express": "^5.2.1"
   }
 }
