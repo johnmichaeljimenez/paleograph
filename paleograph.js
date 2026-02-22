@@ -19,14 +19,19 @@ function getTokenCost(llmResponse) {
 }
 
 async function processFiles(req) {
+	const base = path.resolve("E:/Projects");
 	const realPath = path.resolve(req.sourcePath);
-	if (!statSync(realPath).isDirectory())
-		throw new Error("Invalid path (not directory)");
+
+	if (!realPath.startsWith(base))
+		throw new Error("Path is outside allowed root");
 
 	console.log(`Working on: '${realPath}'`);
 
 	if (!realPath || !existsSync(realPath))
 		throw new Error("Invalid path");
+
+	if (!statSync(realPath).isDirectory())
+		throw new Error("Invalid path (not directory)");
 
 	const allFiles = getFilesRecursively(realPath, realPath, req.blacklist, req.whitelist);
 	console.log(allFiles);
@@ -66,8 +71,8 @@ async function processFiles(req) {
 	const llmResponse = req.dryRun ? {
 		response: ""
 	} : await askLLM(mainText, {
-		temperature: 0.7,
-		topP: 0.9
+		temperature: 0,
+		topP: 1
 	});
 
 	console.log(`LLM response: ${llmResponse.tokensUsed} tokens used. (~$${getTokenCost(llmResponse).toFixed(6)})`);
