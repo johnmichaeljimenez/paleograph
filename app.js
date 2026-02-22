@@ -10,6 +10,8 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = 3000;
 
+let running = false;
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/shared', express.static('shared'));
 app.use(express.json());
@@ -19,18 +21,25 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/process', async (req, res) => {
+  if (running)
+    return res.status(429).send({ "Error": "Request already running. Please wait." });
+
+  running = true;
   try {
     const request = validateRequest(req.body);
     console.log(request);
 
     const report = await processFiles(request);
-    res.json({
+    return res.json({
       fileName: request.outputPath,
       report: report
     });
 
   } catch (error) {
-    res.status(500).send({ "Error": error.message });
+    console.error(error);
+    return res.status(500).send({ "Error": error.message });
+  } finally {
+    running = false;
   }
 });
 
