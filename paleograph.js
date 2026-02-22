@@ -20,11 +20,13 @@ function getTokenCost(llmResponse) {
 
 async function processFiles(req) {
 	const realPath = path.resolve(req.sourcePath);
+	if (!statSync(realPath).isDirectory())
+		throw new Error("Invalid path (not directory)");
+
 	console.log(`Working on: '${realPath}'`);
 
-	if (!realPath || !existsSync(realPath)) {
+	if (!realPath || !existsSync(realPath))
 		throw new Error("Invalid path");
-	}
 
 	const allFiles = getFilesRecursively(realPath, realPath, req.blacklist, req.whitelist);
 	console.log(allFiles);
@@ -37,11 +39,14 @@ async function processFiles(req) {
 	let totalSize = 0;
 
 	mainText += `===== FILE START =====\n\n`;
+
+	let skippedFiles = [];
 	allFiles.forEach(file => {
 		const stats = statSync(file);
 
 		if (stats.size > MAX_FILE_SIZE || totalSize + stats.size > MAX_TOTAL_FILE_SIZE) {
 			console.log(`File '${file}' skipped (file size limit)`);
+			skippedFiles.push(file);
 			return;
 		}
 
@@ -60,7 +65,10 @@ async function processFiles(req) {
 
 	const llmResponse = req.dryRun ? {
 		response: ""
-	} : await askLLM(mainText);
+	} : await askLLM(mainText, {
+		temperature: 0.7,
+		topP: 0.9
+	});
 
 	console.log(`LLM response: ${llmResponse.tokensUsed} tokens used. (~$${getTokenCost(llmResponse).toFixed(6)})`);
 
@@ -68,12 +76,15 @@ async function processFiles(req) {
 		fileList: allFiles,
 		inputFile: mainText,
 		content: llmResponse.response,
-		tokenCount: req.dryRun? 0 : llmResponse.tokensUsed,
-		tokenCost: req.dryRun? 0 : getTokenCost(llmResponse).toFixed(6)
+		skippedFiles: skippedFiles,
+		tokenCount: req.dryRun ? 0 : llmResponse.tokensUsed,
+		tokenCost: req.dryRun ? 0 : getTokenCost(llmResponse).toFixed(6)
 	};
 }
 
 function isFileValid(dirent, skipDirs, validFiles) {
+	if (dirent.isSymbolicLink()) return false;
+
 	const name = dirent.name.toLowerCase();
 	if (skipDirs.includes(name)) return false;
 	if (dirent.isDirectory()) return true;

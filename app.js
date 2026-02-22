@@ -30,7 +30,7 @@ app.post('/api/process', async (req, res) => {
     });
 
   } catch (error) {
-    res.status(500).send({ "Error": error });
+    res.status(500).send({ "Error": error.message });
   }
 });
 
