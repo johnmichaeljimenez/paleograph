@@ -48,6 +48,14 @@ form.addEventListener('submit', async (event) => {
 				fileList.appendChild(li);
 			});
 
+			const skippedFileList = document.getElementById("skippedFileList");
+			skippedFileList.innerHTML = "";
+			jsonResponse.report.skippedFiles.forEach(file => {
+				const li = document.createElement("li");
+				li.textContent = file;
+				skippedFileList.appendChild(li);
+			});
+
 			const blobFile = document.getElementById("blobFile");
 			blobFile.textContent = jsonResponse.report.inputFile;
 
