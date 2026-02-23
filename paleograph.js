@@ -19,10 +19,12 @@ function getTokenCost(llmResponse) {
 }
 
 async function processFiles(req) {
-	const base = path.resolve("E:/Projects");
-	const realPath = path.resolve(req.sourcePath);
+	const base = path.realpathSync("E:/Projects/");
+	const realPath = path.realpathSync(req.sourcePath);
 
-	if (!realPath.startsWith(base))
+	const relative = path.relative(base, realPath);
+
+	if (relative.startsWith("..") || path.isAbsolute(relative))
 		throw new Error("Path is outside allowed root");
 
 	console.log(`Working on: '${realPath}'`);
