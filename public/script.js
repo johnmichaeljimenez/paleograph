@@ -2,6 +2,8 @@ import { newRequest, validateRequest } from '/shared/request.js';
 
 const form = document.getElementById('processForm');
 
+var reportData = {};
+
 function loadData(req) {
 	for (const key in req) {
 		if (req.hasOwnProperty(key)) {
@@ -37,12 +39,12 @@ form.addEventListener('submit', async (event) => {
 		});
 
 		if (response.ok) {
-			const jsonResponse = await response.json();
-			console.log(jsonResponse);
+			reportData = await response.json();
+			console.log(reportData);
 
 			const fileList = document.getElementById("fileList");
 			fileList.innerHTML = "";
-			jsonResponse.report.fileList.forEach(file => {
+			reportData.report.fileList.forEach(file => {
 				const li = document.createElement("li");
 				li.textContent = file;
 				fileList.appendChild(li);
@@ -50,22 +52,22 @@ form.addEventListener('submit', async (event) => {
 
 			const skippedFileList = document.getElementById("skippedFileList");
 			skippedFileList.innerHTML = "";
-			jsonResponse.report.skippedFiles.forEach(file => {
+			reportData.report.skippedFiles.forEach(file => {
 				const li = document.createElement("li");
 				li.textContent = file;
 				skippedFileList.appendChild(li);
 			});
 
 			const blobFile = document.getElementById("blobFile");
-			blobFile.textContent = jsonResponse.report.inputFile;
+			blobFile.textContent = reportData.report.inputFile;
 
 			if (!data.dryRun) {
-				const blob = new Blob([jsonResponse.report.content], { type: 'text/plain;charset=utf-8' });
+				const blob = new Blob([reportData.report.content], { type: 'text/plain;charset=utf-8' });
 				const url = URL.createObjectURL(blob);
 
 				const a = document.createElement('a');
 				a.href = url;
-				a.download = jsonResponse.fileName;
+				a.download = reportData.fileName;
 				document.body.appendChild(a);
 				a.click();
 				document.body.removeChild(a);
@@ -78,5 +80,14 @@ form.addEventListener('submit', async (event) => {
 		console.error(`Error: ${ex}`);
 	} finally {
 		form.style.display = "block";
+	}
+});
+
+
+document.getElementById('blobCopyButton').addEventListener('click', (e) => {
+	if (reportData?.report?.inputFile)
+	{
+		navigator.clipboard.writeText(reportData.report.inputFile);
+		console.log("Copied blob to clipboard");
 	}
 });
