@@ -2,7 +2,7 @@ import { newRequest, validateRequest } from '/shared/request.js';
 
 const form = document.getElementById('processForm');
 
-var reportData = {};
+let reportData = {};
 
 function loadData(req) {
 	for (const key in req) {
@@ -85,9 +85,10 @@ form.addEventListener('submit', async (event) => {
 
 
 document.getElementById('blobCopyButton').addEventListener('click', (e) => {
-	if (reportData?.report?.inputFile)
+	const cData = document.getElementById("blobFile").textContent;
+	if (cData)
 	{
-		navigator.clipboard.writeText(reportData.report.inputFile);
+		navigator.clipboard.writeText(cData);
 		console.log("Copied blob to clipboard");
 	}
 });
