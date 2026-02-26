@@ -74,7 +74,10 @@ async function processFiles(req) {
 		response: ""
 	} : await askLLM(mainText, {
 		temperature: 0,
-		topP: 1
+		topP: 1,
+		systemPrompt: req.customPrompt?.trim()
+			? req.customPrompt
+			: undefined //total override if available
 	});
 
 	console.log(`LLM response: ${llmResponse.tokensUsed} tokens used. (~$${getTokenCost(llmResponse).toFixed(6)})`);
