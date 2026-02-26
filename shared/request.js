@@ -19,7 +19,15 @@ const template = {
 		'reports',
 		'$temp.txt',
 		'system-prompt.txt'
-	]
+	],
+
+	"output": {
+		"fileList": [],
+		"report": "",
+		"tokens": 0,
+		"tokenCost": 0,
+		"dateGenerated": ""
+	}
 }
 
 export function newRequest() {
