@@ -23,8 +23,10 @@ const template = {
 
 	"output": {
 		"fileList": [],
+		"skippedFiles": [],
+		"textBlob": "",
 		"report": "",
-		"tokens": 0,
+		"tokenCount": 0,
 		"tokenCost": 0,
 		"dateGenerated": ""
 	}
@@ -64,6 +66,8 @@ export function validateRequest(req) {
 	req.blacklist = [
 		...new Set([...req.blacklist, ...mandatoryBlacklist])
 	];
+
+	req.output = {};
 
 	return req;
 }
