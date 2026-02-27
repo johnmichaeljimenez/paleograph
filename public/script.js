@@ -2,7 +2,7 @@ import { newRequest, validateRequest } from '/shared/request.js';
 
 const form = document.getElementById('processForm');
 
-let reportData = {};
+let reportData = newRequest();
 
 function loadData(req) {
 	for (const key in req) {
@@ -17,16 +17,14 @@ function loadData(req) {
 	}
 }
 
-loadData(newRequest());
-
 form.addEventListener('submit', async (event) => {
 	event.preventDefault();
 
 	const formData = new FormData(form);
-	const data = validateRequest({ ...Object.fromEntries(formData.entries()) });
-	data.dryRun = form.elements.dryRun.checked;
+	reportData = validateRequest({ ...Object.fromEntries(formData.entries()) });
+	reportData.dryRun = form.elements.dryRun.checked;
 
-	console.log(data);
+	console.log(reportData);
 
 	try {
 		form.style.display = "none";
@@ -39,12 +37,12 @@ form.addEventListener('submit', async (event) => {
 		});
 
 		if (response.ok) {
-			reportData = await response.json();
-			console.log(reportData);
+			reportData.output = await response.json();
+			console.log(reportData.output);
 
 			const fileList = document.getElementById("fileList");
 			fileList.innerHTML = "";
-			reportData.report.fileList.forEach(file => {
+			reportData.output.fileList.forEach(file => {
 				const li = document.createElement("li");
 				li.textContent = file;
 				fileList.appendChild(li);
@@ -52,17 +50,17 @@ form.addEventListener('submit', async (event) => {
 
 			const skippedFileList = document.getElementById("skippedFileList");
 			skippedFileList.innerHTML = "";
-			reportData.report.skippedFiles.forEach(file => {
+			reportData.output.skippedFiles.forEach(file => {
 				const li = document.createElement("li");
 				li.textContent = file;
 				skippedFileList.appendChild(li);
 			});
 
 			const blobFile = document.getElementById("blobFile");
-			blobFile.textContent = reportData.report.inputFile;
+			blobFile.textContent = reportData.output.inputFile;
 
 			if (!data.dryRun) {
-				const blob = new Blob([reportData.report.content], { type: 'text/plain;charset=utf-8' });
+				const blob = new Blob([reportData.output.content], { type: 'text/plain;charset=utf-8' });
 				const url = URL.createObjectURL(blob);
 
 				const a = document.createElement('a');
@@ -92,3 +90,5 @@ document.getElementById('blobCopyButton').addEventListener('click', (e) => {
 		console.log("Copied blob to clipboard");
 	}
 });
+
+loadData(newRequest());
