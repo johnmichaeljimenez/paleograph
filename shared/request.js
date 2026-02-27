@@ -1,6 +1,5 @@
 const template = {
-	"sourcePath": "",
-	"outputPath": "report.json",
+	"sourcePath": "E:/Projects/",
 	"dryRun": false,
 	"customPrompt": "",
 

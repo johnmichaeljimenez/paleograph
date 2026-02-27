@@ -30,10 +30,7 @@ app.post('/api/process', async (req, res) => {
     console.log(request);
 
     const report = await processFiles(request);
-    return res.json({
-      fileName: request.outputPath,
-      report: report
-    });
+    return res.json(report);
 
   } catch (error) {
     console.error(error);

@@ -8,6 +8,9 @@ function loadData(req) {
 	for (const key in req) {
 		if (req.hasOwnProperty(key)) {
 			const field = form.querySelector(`[name="${key}"]`);
+			if (!field)
+				continue;
+			
 			if (Array.isArray(req[key])) {
 				field.value = req[key].join("|");
 			} else {
@@ -33,7 +36,7 @@ form.addEventListener('submit', async (event) => {
 			headers: {
 				"Content-Type": "application/json"
 			},
-			body: JSON.stringify(data)
+			body: JSON.stringify(reportData)
 		});
 
 		if (response.ok) {
@@ -59,7 +62,7 @@ form.addEventListener('submit', async (event) => {
 			const blobFile = document.getElementById("blobFile");
 			blobFile.textContent = reportData.output.inputFile;
 
-			if (!data.dryRun) {
+			if (!reportData.dryRun) {
 				const blob = new Blob([reportData.output.content], { type: 'text/plain;charset=utf-8' });
 				const url = URL.createObjectURL(blob);
 
