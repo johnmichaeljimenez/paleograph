@@ -84,11 +84,12 @@ async function processFiles(req) {
 
 	return {
 		fileList: allFiles,
-		inputFile: mainText,
-		content: llmResponse.response,
+		textBlob: mainText,
+		report: llmResponse.response,
 		skippedFiles: skippedFiles,
 		tokenCount: req.dryRun ? 0 : llmResponse.tokensUsed,
-		tokenCost: req.dryRun ? 0 : getTokenCost(llmResponse).toFixed(6)
+		tokenCost: req.dryRun ? 0 : getTokenCost(llmResponse).toFixed(6),
+		dateGenerated: new Date().toString()
 	};
 }
 
