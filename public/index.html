@@ -35,8 +35,8 @@
 		<button type="submit">Run</button>
 	</form>
 
-
-	<!-- <div id="fileListContainer">
+	<div x-show="newData.output.textBlob != null">
+		<!-- <div id="fileListContainer">
 		<ul id="fileList">
 
 		</ul>
@@ -46,9 +46,10 @@
 		</ul>
 	</div> -->
 
-	<button id="blobCopyButton">Copy</button>
-	<div x-text="newData.output.textBlob" style="white-space: pre-line;">
+		<button @click="copyBlob()">Copy</button>
+		<div x-text="newData.output.textBlob" style="white-space: pre-line;">
 
+		</div>
 	</div>
 </body>
 

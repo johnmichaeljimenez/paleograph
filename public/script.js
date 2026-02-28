@@ -16,7 +16,7 @@ window.app = function () {
 		blacklistString: baseData.blacklist.join("|"),
 
 		loading: false,
-		newData: {...baseData},
+		newData: { ...baseData },
 
 		async run() {
 			this.loading = true;
@@ -27,7 +27,7 @@ window.app = function () {
 					whitelist: this.whitelistString,
 					blacklist: this.blacklistString
 				});
-				
+
 				const response = await fetch("/api/process", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
@@ -40,11 +40,18 @@ window.app = function () {
 
 				this.newData.output = await response.json();
 
-            } catch (err) {
+			} catch (err) {
 				console.error(err);
 				alert(err.message);
 			} finally {
 				this.loading = false;
+			}
+		},
+
+		copyBlob() {
+			if (this.newData?.output?.textBlob) {
+				navigator.clipboard.writeText(this.newData.output.textBlob);
+				console.log("Copied blob to clipboard");
 			}
 		}
 	}
