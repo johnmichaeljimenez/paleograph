@@ -80,8 +80,6 @@ async function processFiles(req) {
 			: undefined //total override if available
 	});
 
-	console.log(`LLM response: ${llmResponse.tokensUsed} tokens used. (~$${getTokenCost(llmResponse).toFixed(6)})`);
-
 	return {
 		fileList: allFiles,
 		textBlob: mainText,
