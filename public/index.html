@@ -38,6 +38,9 @@
 	</form>
 
 	<div x-show="newData?.output?.textBlob?.length > 0">
+		Date: <span x-text="newData.output.dateGenerated"></span><br>
+		Tokens: <span x-text="newData.output.tokenCount"></span><br>
+		Cost: $<span x-show="newData.output.tokenCost > 0" x-text="newData.output.tokenCost"></span>
 		<div x-html="renderedReport"></div>
 
 		<button @click="copyBlob()">Copy</button>
