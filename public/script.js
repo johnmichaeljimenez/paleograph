@@ -50,10 +50,10 @@ window.app = function () {
 				}
 
 				this.newData.output = await response.json();
-
+				this.showToast("Report generation success!", "success");
 			} catch (err) {
 				console.error(err);
-				alert(err.message);
+				this.showToast("Report generation error. Check console.", "error");
 			} finally {
 				this.loading = false;
 			}
@@ -95,9 +95,10 @@ window.app = function () {
 				this.whitelistString = parsed.whitelist?.join("|") || "";
 				this.blacklistString = parsed.blacklist?.join("|") || "";
 
-				console.log("File loaded");
+				this.showToast(`File loaded: ${this.fileHandle.name}`, "success");
 
 			} catch (error) {
+				this.showToast("File open error. Check console.", "error");
 				console.error("File open error:", error);
 			}
 		},
@@ -122,8 +123,9 @@ window.app = function () {
 
 				await writable.close();
 
-				console.log("File saved");
+				this.showToast(`File saved: ${this.fileHandle.name}`, "success");
 			} catch (error) {
+				this.showToast("File save error. Check console.", "error");
 				console.error("File save error:", error);
 			}
 		},
