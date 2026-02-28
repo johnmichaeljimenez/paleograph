@@ -3,6 +3,7 @@ import { newRequest, validateRequest } from '/shared/request.js';
 const form = document.getElementById('processForm');
 
 let reportData = newRequest();
+let fileHandle = null;
 
 function loadData(req) {
 	for (const key in req) {
@@ -10,7 +11,7 @@ function loadData(req) {
 			const field = form.querySelector(`[name="${key}"]`);
 			if (!field)
 				continue;
-			
+
 			if (Array.isArray(req[key])) {
 				field.value = req[key].join("|");
 			} else {
@@ -60,19 +61,10 @@ form.addEventListener('submit', async (event) => {
 			});
 
 			const blobFile = document.getElementById("blobFile");
-			blobFile.textContent = reportData.output.inputFile;
+			blobFile.textContent = reportData.output.textBlob;
 
 			if (!reportData.dryRun) {
-				const blob = new Blob([reportData.output.content], { type: 'text/plain;charset=utf-8' });
-				const url = URL.createObjectURL(blob);
-
-				const a = document.createElement('a');
-				a.href = url;
-				a.download = reportData.fileName;
-				document.body.appendChild(a);
-				a.click();
-				document.body.removeChild(a);
-				URL.revokeObjectURL(url);
+				const report = reportData.output.report;
 			}
 		} else {
 			console.error('Error downloading the file');
@@ -87,11 +79,31 @@ form.addEventListener('submit', async (event) => {
 
 document.getElementById('blobCopyButton').addEventListener('click', (e) => {
 	const cData = document.getElementById("blobFile").textContent;
-	if (cData)
-	{
+	if (cData) {
 		navigator.clipboard.writeText(cData);
 		console.log("Copied blob to clipboard");
 	}
 });
 
 loadData(newRequest());
+
+document.getElementById("newButton")
+	.addEventListener("click", async () => {
+		fileHandle = null;
+	});
+
+document.getElementById("openButton")
+	.addEventListener("click", async () => {
+		[fileHandle] = await window.showOpenFilePicker();
+	});
+
+document.getElementById("saveButton")
+	.addEventListener("click", async () => {
+		if (!fileHandle) {
+			return;
+		}
+
+		// const writable = await fileHandle.createWritable();
+		// await writable.write(editor.value);
+		// await writable.close();
+	});
