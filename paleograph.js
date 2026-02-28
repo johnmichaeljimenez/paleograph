@@ -1,9 +1,7 @@
-// This is Paleograph project source code (your own source code) and you are self-evaluating it.
-// This is only used as a personal local application for Windows 10 PC. No symlinks, no networked paths, just default local files.
-
 import { existsSync, readdirSync, readFileSync, statSync, realpathSync } from 'fs'
 import { askLLM } from 'core-common' //core-common's author is the same as this codebase.
 import path from 'path'
+import { setTimeout as delay } from 'timers/promises'
 
 const MB_SIZE = 5;
 const MB_TOTAL_SIZE = 10;
@@ -69,6 +67,9 @@ async function processFiles(req) {
 	});
 
 	mainText += `\n\n===== FILE END =====\n\n`;
+
+	if (req.dryRun)
+		await delay(2000);
 
 	const llmResponse = req.dryRun ? {
 		response: getSampleMarkdown()
