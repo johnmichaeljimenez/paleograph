@@ -5,6 +5,7 @@ window.app = function () {
 	const baseData = newRequest();
 
 	return {
+		navOpen: false,
 		tab: 'form',
 
 		fileHandle: null,

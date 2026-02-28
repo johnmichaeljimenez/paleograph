@@ -14,12 +14,37 @@
 	<script type="module" src="/script.js"></script>
 </head>
 
-<body x-data="app">
-
+<body x-data="app" style="padding-top: 2rem;">
 	<section class="section">
-		<button class="button" @click="fileNew()">New</button>
-		<button class="button" @click="fileOpen()">Open</button>
-		<button class="button" @click="fileSave()">Save</button>
+		<nav class="navbar has-shadow mb-4 is-fixed-top" role="navigation" aria-label="main navigation">
+			<div class="navbar-brand">
+				<a class="navbar-item has-text-weight-semibold">
+					Paleograph
+				</a>
+
+				<a role="button" class="navbar-burger" :class="{ 'is-active': navOpen }" @click="navOpen = !navOpen"
+					aria-label="menu" aria-expanded="false">
+					<span aria-hidden="true"></span>
+					<span aria-hidden="true"></span>
+					<span aria-hidden="true"></span>
+				</a>
+			</div>
+
+			<div class="navbar-menu" :class="{ 'is-active': navOpen }">
+
+				<div class="navbar-start">
+					<a class="navbar-item" @click="fileNew()">New</a>
+					<a class="navbar-item" @click="fileOpen()">Open</a>
+					<a class="navbar-item" @click="fileSave()">Save</a>
+				</div>
+
+				<div class="navbar-end">
+					<div class="navbar-item">
+						<span class="has-text-grey">Project Tools</span>
+					</div>
+				</div>
+			</div>
+		</nav>
 
 		<div class="tabs is-boxed is-medium">
 			<ul>
@@ -88,7 +113,8 @@
 			</div>
 
 			<div x-show="newData?.output?.textBlob?.length > 0">
-				Date: <span x-text="newData.output.dateGenerated"></span><br>
+				Date: <span x-text="newData.output.dateGenerated"></span>
+				<hr>
 				<div x-html="renderedReport"></div>
 			</div>
 		</div>
@@ -98,14 +124,25 @@
 			<div x-show="newData?.output?.textBlob?.length == 0">
 				No Report available
 			</div>
-			
-			<div x-show="newData?.output?.textBlob?.length > 0">
-				Tokens: <span x-text="newData.output.tokenCount"></span><br>
-				Cost: $<span x-show="newData.output.tokenCost > 0" x-text="newData.output.tokenCost"></span>
-				<button @click="copyBlob()">Copy</button>
-				<div x-text="newData.output.textBlob" style="white-space: pre-line;">
 
+			<div x-show="newData?.output?.textBlob?.length > 0">
+				<div class="level">
+					<div class="level-left">
+						<div class="level-item">
+							<span x-text="`Tokens: ${newData.output.tokenCount}`"></span>
+						</div>
+						<div class="level-item">
+							<span x-show="newData.output.tokenCost > 0" x-text="`Cost: $${newData.output.tokenCost}`"></span>
+						</div>
+					</div>
+					<div class="level-right">
+						<div class="level-item">
+							<button class="button is-small" @click="copyBlob()">Copy</button>
+						</div>
+					</div>
 				</div>
+
+				<pre><code x-text="newData.output.textBlob"></code></pre>
 			</div>
 		</div>
 
