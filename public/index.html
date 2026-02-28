@@ -6,48 +6,55 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Paleograph</title>
 
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+	<link href="styles.css" rel="stylesheet">
+
 	<script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
-	<link href="styles.css" rel="stylesheet">
 	<script type="module" src="/script.js"></script>
 </head>
 
 <body x-data="app">
-	<button @click="fileNew()">New</button>
-	<button @click="fileOpen()">Open</button>
-	<button @click="fileSave()">Save</button>
 
-	<br><br>
-	<form @submit.prevent="run">
+	<section class="section">
+		<button class="button" @click="fileNew()">New</button>
+		<button class="button" @click="fileOpen()">Open</button>
+		<button class="button" @click="fileSave()">Save</button>
 
-		<label>Target Directory:</label><br>
-		<input type="text" x-model="form.sourcePath" required><br>
+		<div class="container">
+			<form @submit.prevent="run">
 
-		<label>Custom Prompt</label><br>
-		<textarea x-model="form.customPrompt"></textarea><br><br>
+				<label>Target Directory:</label>
+				<input class="input" type="text" x-model="form.sourcePath" required>
 
-		<label>Whitelist Extensions (pipe separated):</label><br>
-		<input type="text" x-model="whitelistString"><br>
+				<label>Custom Prompt</label>
+				<textarea class="textarea" x-model="form.customPrompt"></textarea>
 
-		<label>Blacklist Folders (pipe separated):</label><br>
-		<input type="text" x-model="blacklistString"><br><br>
+				<label>Whitelist Extensions (pipe separated):</label>
+				<input class="input" type="text" x-model="whitelistString">
 
-		<input type="checkbox" x-model="form.dryRun"><br><br>
+				<label>Blacklist Folders (pipe separated):</label>
+				<input class="input" type="text" x-model="blacklistString">
 
-		<button type="submit">Run</button>
-	</form>
+				<input type="checkbox" x-model="form.dryRun">
 
-	<div x-show="newData?.output?.textBlob?.length > 0">
-		Date: <span x-text="newData.output.dateGenerated"></span><br>
-		Tokens: <span x-text="newData.output.tokenCount"></span><br>
-		Cost: $<span x-show="newData.output.tokenCost > 0" x-text="newData.output.tokenCost"></span>
-		<div x-html="renderedReport"></div>
-
-		<button @click="copyBlob()">Copy</button>
-		<div x-text="newData.output.textBlob" style="white-space: pre-line;">
-
+				<button class="button is-primary" type="submit">Run</button>
+			</form>
 		</div>
-	</div>
+
+		<div x-show="newData?.output?.textBlob?.length > 0">
+			Date: <span x-text="newData.output.dateGenerated"></span><br>
+			Tokens: <span x-text="newData.output.tokenCount"></span><br>
+			Cost: $<span x-show="newData.output.tokenCost > 0" x-text="newData.output.tokenCost"></span>
+			<div x-html="renderedReport"></div>
+
+			<button @click="copyBlob()">Copy</button>
+			<div x-text="newData.output.textBlob" style="white-space: pre-line;">
+
+			</div>
+		</div>
+
+	</section>
 </body>
 
 </html>
