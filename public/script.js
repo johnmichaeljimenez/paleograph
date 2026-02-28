@@ -5,6 +5,8 @@ window.app = function () {
 	const baseData = newRequest();
 
 	return {
+		tab: 'form',
+
 		fileHandle: null,
 		form: { ...baseData },
 		whitelistString: baseData.whitelist.join("|"),
@@ -26,6 +28,7 @@ window.app = function () {
 		},
 
 		async run() {
+			this.tab = 'report';
 			this.loading = true;
 
 			try {

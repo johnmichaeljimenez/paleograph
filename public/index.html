@@ -21,7 +21,21 @@
 		<button class="button" @click="fileOpen()">Open</button>
 		<button class="button" @click="fileSave()">Save</button>
 
-		<div class="container">
+		<div class="tabs is-boxed is-medium">
+			<ul>
+				<li :class="{ 'is-active': tab === 'form' }">
+					<a @click="tab = 'form'">Form</a>
+				</li>
+				<li :class="{ 'is-active': tab === 'report' }">
+					<a @click="tab = 'report'">Report</a>
+				</li>
+				<li :class="{ 'is-active': tab === 'info' }">
+					<a @click="tab = 'info'">Info</a>
+				</li>
+			</ul>
+		</div>
+
+		<div class="container" x-show="tab === 'form'">
 			<form @submit.prevent="run">
 
 				<div class="field">
@@ -68,15 +82,30 @@
 			</form>
 		</div>
 
-		<div x-show="newData?.output?.textBlob?.length > 0">
-			Date: <span x-text="newData.output.dateGenerated"></span><br>
-			Tokens: <span x-text="newData.output.tokenCount"></span><br>
-			Cost: $<span x-show="newData.output.tokenCost > 0" x-text="newData.output.tokenCost"></span>
-			<div x-html="renderedReport"></div>
+		<div class="container" x-show="tab === 'report'">
+			<div x-show="newData?.output?.textBlob?.length == 0">
+				No Report available
+			</div>
 
-			<button @click="copyBlob()">Copy</button>
-			<div x-text="newData.output.textBlob" style="white-space: pre-line;">
+			<div x-show="newData?.output?.textBlob?.length > 0">
+				Date: <span x-text="newData.output.dateGenerated"></span><br>
+				<div x-html="renderedReport"></div>
+			</div>
+		</div>
+		</div>
 
+		<div class="container" x-show="tab === 'info'">
+			<div x-show="newData?.output?.textBlob?.length == 0">
+				No Report available
+			</div>
+			
+			<div x-show="newData?.output?.textBlob?.length > 0">
+				Tokens: <span x-text="newData.output.tokenCount"></span><br>
+				Cost: $<span x-show="newData.output.tokenCost > 0" x-text="newData.output.tokenCost"></span>
+				<button @click="copyBlob()">Copy</button>
+				<div x-text="newData.output.textBlob" style="white-space: pre-line;">
+
+				</div>
 			</div>
 		</div>
 
