@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { newRequest, validateRequest } from './shared/request.js';
+import { validateRequest } from './shared/request.js';
 import { processFiles } from './paleograph.js';
 
 const __filename = fileURLToPath(import.meta.url);

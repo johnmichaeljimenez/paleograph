@@ -1,6 +1,6 @@
 const template = {
-	"sourcePath": "E:/Projects/",
-	"dryRun": false,
+	"sourcePath": "E:/Projects/paleograph",
+	"dryRun": true,
 	"customPrompt": "",
 
 	"whitelist": [
