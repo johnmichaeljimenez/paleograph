@@ -1,22 +1,29 @@
 import Alpine from 'https://cdn.jsdelivr.net/npm/alpinejs@3/+esm';
 import { newRequest, validateRequest } from '/shared/request.js';
 
-const form = document.getElementById('processForm');
-
-let reportData = newRequest();
-let fileHandle = null;
-
 window.app = function () {
 	const baseData = newRequest();
 
 	return {
+		fileHandle: null,
 		form: { ...baseData },
-
 		whitelistString: baseData.whitelist.join("|"),
 		blacklistString: baseData.blacklist.join("|"),
+		newData: { ...baseData },
 
 		loading: false,
-		newData: { ...baseData },
+
+		get renderedReport() {
+			if (!this.newData?.output?.report) return '';
+
+			const raw = marked.parse(this.newData.output.report, {
+				gfm: true,
+				breaks: true,
+				headerIds: false
+			});
+
+			return DOMPurify.sanitize(raw);
+		},
 
 		async run() {
 			this.loading = true;
@@ -55,40 +62,69 @@ window.app = function () {
 			}
 		},
 
-		get renderedReport() {
-			if (!this.newData?.output?.report) return '';
+		fileNew() {
+			this.fileHandle = null;
 
-			const raw = marked.parse(this.newData.output.report, {
-				gfm: true,
-				breaks: true,
-				headerIds: false
-			});
+			const data = newRequest();
+			this.form = { ...data };
+			this.whitelistString = data.whitelist.join("|");
+			this.blacklistString = data.blacklist.join("|");
+			this.newData = { ...data };
+		},
 
-			return DOMPurify.sanitize(raw);
+		async fileOpen() {
+			try {
+				[this.fileHandle] = await window.showOpenFilePicker({
+					types: [{
+						description: "JSON Files",
+						accept: { "application/json": [".json"] }
+					}]
+				});
+
+				const file = await this.fileHandle.getFile();
+				const text = await file.text();
+				const parsed = JSON.parse(text);
+
+				this.newData = parsed;
+
+				this.form = { ...parsed };
+				this.whitelistString = parsed.whitelist?.join("|") || "";
+				this.blacklistString = parsed.blacklist?.join("|") || "";
+
+				console.log("File loaded");
+
+			} catch (error) {
+				console.error("File open error:", error);
+			}
+		},
+
+		async fileSave() {
+			try {
+				if (!this.fileHandle) {
+					this.fileHandle = await window.showSaveFilePicker({
+						suggestedName: "paleograph.json",
+						types: [{
+							description: "JSON Files",
+							accept: { "application/json": [".json"] }
+						}]
+					});
+				}
+
+				const writable = await this.fileHandle.createWritable();
+
+				await writable.write(
+					JSON.stringify(this.newData, null, 2)
+				);
+
+				await writable.close();
+
+				console.log("File saved");
+			} catch (error) {
+				console.error("File save error:", error);
+			}
 		}
 	}
 }
 
-window.Alpine = Alpine
-Alpine.start()
-
-document.getElementById("newButton")
-	.addEventListener("click", async () => {
-		fileHandle = null;
-	});
-
-document.getElementById("openButton")
-	.addEventListener("click", async () => {
-		[fileHandle] = await window.showOpenFilePicker();
-	});
-
-document.getElementById("saveButton")
-	.addEventListener("click", async () => {
-		if (!fileHandle) {
-			return;
-		}
-
-		// const writable = await fileHandle.createWritable();
-		// await writable.write(editor.value);
-		// await writable.close();
-	});
+window.Alpine = Alpine;
+Alpine.start();

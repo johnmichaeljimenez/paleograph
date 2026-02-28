@@ -13,9 +13,9 @@
 </head>
 
 <body x-data="app">
-	<button id="newButton">New</button>
-	<button id="openButton">Open</button>
-	<button id="saveButton">Save</button>
+	<button @click="fileNew()">New</button>
+	<button @click="fileOpen()">Open</button>
+	<button @click="fileSave()">Save</button>
 
 	<br><br>
 	<form @submit.prevent="run">
