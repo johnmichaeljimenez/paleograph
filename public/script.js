@@ -1,3 +1,4 @@
+import Alpine from 'https://cdn.jsdelivr.net/npm/alpinejs@3/+esm';
 import { newRequest, validateRequest } from '/shared/request.js';
 
 const form = document.getElementById('processForm');
@@ -5,87 +6,52 @@ const form = document.getElementById('processForm');
 let reportData = newRequest();
 let fileHandle = null;
 
-function loadData(req) {
-	for (const key in req) {
-		if (req.hasOwnProperty(key)) {
-			const field = form.querySelector(`[name="${key}"]`);
-			if (!field)
-				continue;
+window.app = function () {
+	const baseData = newRequest();
 
-			if (Array.isArray(req[key])) {
-				field.value = req[key].join("|");
-			} else {
-				field.value = req[key];
+	return {
+		form: { ...baseData },
+
+		whitelistString: baseData.whitelist.join("|"),
+		blacklistString: baseData.blacklist.join("|"),
+
+		loading: false,
+		newData: {...baseData},
+
+		async run() {
+			this.loading = true;
+
+			try {
+				this.newData = validateRequest({
+					...this.form,
+					whitelist: this.whitelistString,
+					blacklist: this.blacklistString
+				});
+				
+				const response = await fetch("/api/process", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(this.newData)
+				});
+
+				if (!response.ok) {
+					throw new Error("Server error");
+				}
+
+				this.newData.output = await response.json();
+
+            } catch (err) {
+				console.error(err);
+				alert(err.message);
+			} finally {
+				this.loading = false;
 			}
 		}
 	}
 }
 
-form.addEventListener('submit', async (event) => {
-	event.preventDefault();
-
-	const formData = new FormData(form);
-	reportData = validateRequest({ ...Object.fromEntries(formData.entries()) });
-	reportData.dryRun = form.elements.dryRun.checked;
-
-	console.log(reportData);
-
-	try {
-		form.style.display = "none";
-		const response = await fetch("/api/process", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify(reportData)
-		});
-
-		if (response.ok) {
-			reportData.output = await response.json();
-			console.log(reportData.output);
-
-			const fileList = document.getElementById("fileList");
-			fileList.innerHTML = "";
-			reportData.output.fileList.forEach(file => {
-				const li = document.createElement("li");
-				li.textContent = file;
-				fileList.appendChild(li);
-			});
-
-			const skippedFileList = document.getElementById("skippedFileList");
-			skippedFileList.innerHTML = "";
-			reportData.output.skippedFiles.forEach(file => {
-				const li = document.createElement("li");
-				li.textContent = file;
-				skippedFileList.appendChild(li);
-			});
-
-			const blobFile = document.getElementById("blobFile");
-			blobFile.textContent = reportData.output.textBlob;
-
-			if (!reportData.dryRun) {
-				const report = reportData.output.report;
-			}
-		} else {
-			console.error('Error downloading the file');
-		}
-	} catch (ex) {
-		console.error(`Error: ${ex}`);
-	} finally {
-		form.style.display = "block";
-	}
-});
-
-
-document.getElementById('blobCopyButton').addEventListener('click', (e) => {
-	const cData = document.getElementById("blobFile").textContent;
-	if (cData) {
-		navigator.clipboard.writeText(cData);
-		console.log("Copied blob to clipboard");
-	}
-});
-
-loadData(newRequest());
+window.Alpine = Alpine
+Alpine.start()
 
 document.getElementById("newButton")
 	.addEventListener("click", async () => {

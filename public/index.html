@@ -7,33 +7,36 @@
 	<title>Paleograph</title>
 
 	<link href="styles.css" rel="stylesheet">
+	<script type="module" src="/script.js"></script>
 </head>
 
-<body>
+<body x-data="app">
 	<button id="newButton">New</button>
 	<button id="openButton">Open</button>
 	<button id="saveButton">Save</button>
 
-	<form id="processForm">
+	<br><br>
+	<form @submit.prevent="run">
+
 		<label>Target Directory:</label><br>
-		<input type="text" name="sourcePath" value="E:/Projects" required><br>
+		<input type="text" x-model="form.sourcePath" required><br>
 
 		<label>Custom Prompt</label><br>
-		<textarea name="customPrompt" rows="8" placeholder="<System Prompt>"></textarea><br><br>
+		<textarea x-model="form.customPrompt"></textarea><br><br>
 
 		<label>Whitelist Extensions (pipe separated):</label><br>
-		<input type="text" name="whitelist"><br>
+		<input type="text" x-model="whitelistString"><br>
 
 		<label>Blacklist Folders (pipe separated):</label><br>
-		<input type="text" name="blacklist"><br><br>
+		<input type="text" x-model="blacklistString"><br><br>
 
-		<input type="checkbox" name="dryRun" checked="true">Dry Run<br><br>
+		<input type="checkbox" x-model="form.dryRun"><br><br>
 
 		<button type="submit">Run</button>
 	</form>
 
 
-	<div id="fileListContainer">
+	<!-- <div id="fileListContainer">
 		<ul id="fileList">
 
 		</ul>
@@ -41,14 +44,12 @@
 		<ul id="skippedFileList">
 
 		</ul>
-	</div>
+	</div> -->
 
 	<button id="blobCopyButton">Copy</button>
-	<div id="blobFile" style="white-space: pre-line;">
+	<div x-text="newData.output.textBlob" style="white-space: pre-line;">
 
 	</div>
-
-	<script type="module" src="/script.js"></script>
 </body>
 
 </html>
