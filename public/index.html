@@ -24,21 +24,47 @@
 		<div class="container">
 			<form @submit.prevent="run">
 
-				<label>Target Directory:</label>
-				<input class="input" type="text" x-model="form.sourcePath" required>
+				<div class="field">
+					<label class="label is-medium">Target Directory</label>
+					<div class="control">
+						<input class="input is-medium" type="text" x-model="form.sourcePath" required>
+					</div>
+				</div>
 
-				<label>Custom Prompt</label>
-				<textarea class="textarea" x-model="form.customPrompt"></textarea>
+				<div class="field">
+					<label class="label is-medium">Custom Prompt</label>
+					<div class="control">
+						<textarea class="textarea is-medium" x-model="form.customPrompt"></textarea>
+					</div>
+				</div>
 
-				<label>Whitelist Extensions (pipe separated):</label>
-				<input class="input" type="text" x-model="whitelistString">
+				<div class="field">
+					<label class="label is-medium">Whitelist Extensions (pipe separated)</label>
+					<div class="control">
+						<input class="input is-medium" type="text" x-model="whitelistString">
+					</div>
+				</div>
 
-				<label>Blacklist Folders (pipe separated):</label>
-				<input class="input" type="text" x-model="blacklistString">
+				<div class="field">
+					<label class="label is-medium">Blacklist Folders (pipe separated)</label>
+					<div class="control">
+						<input class="input is-medium" type="text" x-model="blacklistString">
+					</div>
+				</div>
 
-				<input type="checkbox" x-model="form.dryRun">
+				<div class="field">
+					<div class="control">
+						<label class="checkbox">
+							<input type="checkbox" x-model="form.dryRun"> Dry Run
+						</label>
+					</div>
+				</div>
 
-				<button class="button is-primary" type="submit">Run</button>
+				<div class="field">
+					<div class="control">
+						<button class="button is-primary" type="submit">Run</button>
+					</div>
+				</div>
 			</form>
 		</div>
 
