@@ -71,7 +71,7 @@ async function processFiles(req) {
 	mainText += `\n\n===== FILE END =====\n\n`;
 
 	const llmResponse = req.dryRun ? {
-		response: ""
+		response: getSampleMarkdown()
 	} : await askLLM(mainText, {
 		temperature: 0,
 		topP: 1,
@@ -120,6 +120,46 @@ function getFilesRecursively(realPath, dir, skipDirs, validFiles, depth = 0) {
 		}
 	});
 	return results;
+}
+
+function getSampleMarkdown() {
+	return `
+# Sample Markdown File
+
+This is a placeholder file for dry-run testing.
+
+## Purpose
+
+- Validate file discovery
+- Test text blob generation
+- Simulate LLM processing
+- Ensure whitelist filtering works
+
+## Sections
+
+You can add more content here as needed.
+
+### Example List
+
+1. Item one
+2. Item two
+3. Item three
+
+### Code Example
+
+\`\`\`js
+console.log("Hello, dry run!");
+\`\`\`
+
+## Notes
+
+- This file contains valid markdown
+- It is safe to include in your test directory
+- It demonstrates typical content structure
+
+---
+End of sample file.
+`;
 }
 
 export {
