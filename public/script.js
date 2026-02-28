@@ -62,7 +62,7 @@ window.app = function () {
 		copyBlob() {
 			if (this.newData?.output?.textBlob) {
 				navigator.clipboard.writeText(this.newData.output.textBlob);
-				console.log("Copied blob to clipboard");
+				this.showToast("Copied blob to clipboard!", "success");
 			}
 		},
 
@@ -126,7 +126,26 @@ window.app = function () {
 			} catch (error) {
 				console.error("File save error:", error);
 			}
-		}
+		},
+
+		toast: {
+			show: false,
+			message: '',
+			type: 'info',
+			timeout: null
+		},
+
+		showToast(message, type = 'info', duration = 3000) {
+			this.toast.message = message;
+			this.toast.type = type;
+			this.toast.show = true;
+
+			clearTimeout(this.toast.timeout);
+
+			this.toast.timeout = setTimeout(() => {
+				this.toast.show = false;
+			}, duration);
+		},
 	}
 }
 

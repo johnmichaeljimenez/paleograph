@@ -151,6 +151,16 @@
 		</div>
 
 	</section>
+
+	<div style="position: fixed; top: 1rem; right: 1rem; z-index: 9999;" x-show="toast.show" x-transition x-cloak>
+		<div class="notification" :class="{
+            'is-success': toast.type === 'success',
+            'is-danger': toast.type === 'error',
+            'is-info': toast.type === 'info'
+         }" @click="toast.show = false">
+			<span x-text="toast.message"></span>
+		</div>
+	</div>
 </body>
 
 </html>
