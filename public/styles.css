@@ -1,3 +1,37 @@
 [x-cloak] {
-    display: none !important;
+	display: none !important;
+}
+
+.full-page-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 998;
+	/* below toast (which is 9999) */
+	backdrop-filter: blur(2px);
+	/* optional: nice subtle blur */
+}
+
+.spinner-container {
+	text-align: center;
+}
+
+.spinner {
+	width: 64px;
+	height: 64px;
+	border: 8px solid #dbdbdb;
+	border-top: 8px solid #3273dc;
+	/* Bulma primary blue */
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	margin: 0 auto;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
 }

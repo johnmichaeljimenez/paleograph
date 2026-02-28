@@ -29,7 +29,6 @@ window.app = function () {
 		},
 
 		async run() {
-			this.tab = 'report';
 			this.loading = true;
 
 			try {
@@ -50,6 +49,7 @@ window.app = function () {
 				}
 
 				this.newData.output = await response.json();
+				this.tab = 'report';
 				this.showToast("Report generation success!", "success");
 			} catch (err) {
 				console.error(err);
