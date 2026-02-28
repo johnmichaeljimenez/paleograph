@@ -53,6 +53,18 @@ window.app = function () {
 				navigator.clipboard.writeText(this.newData.output.textBlob);
 				console.log("Copied blob to clipboard");
 			}
+		},
+
+		get renderedReport() {
+			if (!this.newData?.output?.report) return '';
+
+			const raw = marked.parse(this.newData.output.report, {
+				gfm: true,
+				breaks: true,
+				headerIds: false
+			});
+
+			return DOMPurify.sanitize(raw);
 		}
 	}
 }

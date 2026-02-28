@@ -125,7 +125,7 @@ function getFilesRecursively(realPath, dir, skipDirs, validFiles, depth = 0) {
 function getSampleMarkdown() {
 	return `
 # Sample Markdown File
-
+---
 This is a placeholder file for dry-run testing.
 
 ## Purpose

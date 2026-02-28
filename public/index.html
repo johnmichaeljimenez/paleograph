@@ -6,6 +6,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Paleograph</title>
 
+	<script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 	<link href="styles.css" rel="stylesheet">
 	<script type="module" src="/script.js"></script>
 </head>
@@ -36,22 +38,10 @@
 	</form>
 
 	<div x-show="newData?.output?.textBlob?.length > 0">
-		<!-- <div id="fileListContainer">
-		<ul id="fileList">
-
-		</ul>
-		<br>
-		<ul id="skippedFileList">
-
-		</ul>
-	</div> -->
+		<div x-html="renderedReport"></div>
 
 		<button @click="copyBlob()">Copy</button>
 		<div x-text="newData.output.textBlob" style="white-space: pre-line;">
-
-		</div>
-		
-		<div x-text="newData.output.report" style="white-space: pre-line;">
 
 		</div>
 	</div>
