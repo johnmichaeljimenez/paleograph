@@ -102,9 +102,9 @@ window.app = function () {
 			}
 		},
 
-		async fileSave() {
+		async fileSave(saveAs) {
 			try {
-				if (!this.fileHandle) {
+				if (!this.fileHandle || saveAs) {
 					this.fileHandle = await window.showSaveFilePicker({
 						suggestedName: "paleograph.json",
 						types: [{

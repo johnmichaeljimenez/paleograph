@@ -35,7 +35,8 @@
 				<div class="navbar-start">
 					<a class="navbar-item" @click="fileNew()">New</a>
 					<a class="navbar-item" @click="fileOpen()">Open</a>
-					<a class="navbar-item" @click="fileSave()">Save</a>
+					<a class="navbar-item" @click="fileSave(false)">Save</a>
+					<a class="navbar-item" @click="fileSave(true)">Save As</a>
 				</div>
 
 				<div class="navbar-end">
@@ -45,6 +46,8 @@
 				</div>
 			</div>
 		</nav>
+
+		<span x-text="fileHandle == null? '<Untitled>' : fileHandle.name"></span><br><br>
 
 		<div class="tabs is-boxed is-medium">
 			<ul>
@@ -132,12 +135,13 @@
 							<span x-text="`Tokens: ${newData.output.tokenCount}`"></span>
 						</div>
 						<div class="level-item">
-							<span x-show="newData.output.tokenCost > 0" x-text="`Cost: $${newData.output.tokenCost}`"></span>
+							<span x-show="newData.output.tokenCost > 0"
+								x-text="`Cost: $${newData.output.tokenCost}`"></span>
 						</div>
 					</div>
 					<div class="level-right">
 						<div class="level-item">
-							<button class="button is-small" @click="copyBlob()">Copy</button>
+							<button class="button is-small is-primary" @click="copyBlob()">Copy</button>
 						</div>
 					</div>
 				</div>
