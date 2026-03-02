@@ -44,16 +44,18 @@ window.app = function () {
 					body: JSON.stringify(this.newData)
 				});
 
+				const data = await response.json();
+
 				if (!response.ok) {
 					throw new Error(data?.Error || "Server error");
 				}
 
-				this.newData.output = await response.json();
+				this.newData.output = data;
 				this.tab = 'report';
 				this.showToast("Report generation success!", "success");
 			} catch (err) {
 				console.error(err);
-				this.showToast("Report generation error. Check console.", "error");
+				this.showToast(`Error: ${err.message}` || "Report generation error.", "error");
 			} finally {
 				this.loading = false;
 			}
