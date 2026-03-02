@@ -25,7 +25,15 @@ window.app = function () {
 				headerIds: false
 			});
 
-			return DOMPurify.sanitize(raw);
+			const clean = DOMPurify.sanitize(raw);
+
+			this.$nextTick(() => {
+				document.querySelectorAll('#report pre code').forEach((block) => {
+					hljs.highlightElement(block);
+				});
+			});
+
+			return clean;
 		},
 
 		async run() {
