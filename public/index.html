@@ -127,6 +127,20 @@
 				No Report available
 			</div>
 
+			<div x-show="newData?.output?.fileList?.length > 0">
+				File List
+				<div class="content">
+					<ul>
+						<template x-for="(file, index) in newData.output.fileList" :key="file">
+							<li>
+								<code x-text="file"></code>
+							</li>
+						</template>
+					</ul>
+				</div>
+				<hr>
+			</div>
+
 			<div x-show="newData?.output?.textBlob?.length > 0">
 				<div class="level">
 					<div class="level-left">
