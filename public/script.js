@@ -45,7 +45,7 @@ window.app = function () {
 				});
 
 				if (!response.ok) {
-					throw new Error("Server error");
+					throw new Error(data?.Error || "Server error");
 				}
 
 				this.newData.output = await response.json();
