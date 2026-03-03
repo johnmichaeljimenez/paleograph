@@ -185,6 +185,13 @@ window.app = function () {
 				.map(v => v.trim())
 				.filter(Boolean);
 		},
+
+		init() {
+			window.addEventListener("beforeunload", (e) => {
+				if (!this.isDirty) return;
+				e.preventDefault();
+			});
+		}
 	}
 }
 
