@@ -172,8 +172,7 @@ window.app = function () {
 		set whitelistString(value) {
 			this.newData.whitelist = value
 				.split("|")
-				.map(v => v.trim())
-				.filter(Boolean);
+				.map(v => v.trim());
 		},
 
 		get blacklistString() {
@@ -182,8 +181,7 @@ window.app = function () {
 		set blacklistString(value) {
 			this.newData.blacklist = value
 				.split("|")
-				.map(v => v.trim())
-				.filter(Boolean);
+				.map(v => v.trim());
 		},
 
 		init() {
