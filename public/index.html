@@ -12,7 +12,8 @@
 	<script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
@@ -53,7 +54,7 @@
 			</div>
 		</nav>
 
-		<span x-text="fileHandle == null? '<Untitled>' : fileHandle.name"></span><br><br>
+		<span x-text="displayFileName"></span><br><br>
 
 		<div class="tabs is-boxed is-medium">
 			<ul>

@@ -13,6 +13,7 @@ window.app = function () {
 		whitelistString: baseData.whitelist.join("|"),
 		blacklistString: baseData.blacklist.join("|"),
 		newData: { ...baseData },
+		lastSavedSnapshot: JSON.stringify(baseData),
 
 		loading: false,
 
@@ -157,6 +158,18 @@ window.app = function () {
 			this.toast.timeout = setTimeout(() => {
 				this.toast.show = false;
 			}, duration);
+		},
+
+		get isDirty() {
+			return JSON.stringify(this.newData) !== this.lastSavedSnapshot;
+		},
+
+		get displayFileName() {
+			const name = this.fileHandle == null
+				? '<Untitled>'
+				: this.fileHandle.name;
+
+			return this.isDirty ? `*${name}` : name;
 		},
 	}
 }
