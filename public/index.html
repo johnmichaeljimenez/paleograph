@@ -54,7 +54,10 @@
 			</div>
 		</nav>
 
-		<span x-text="displayFileName"></span><br><br>
+		<span>
+			<span x-show="isDirty" class="has-text-danger">*</span>
+			<span x-text="fileHandle == null ? '<Untitled>' : fileHandle.name"></span>
+		</span>
 
 		<div class="tabs is-boxed is-medium">
 			<ul>

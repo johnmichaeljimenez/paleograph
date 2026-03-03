@@ -70,6 +70,10 @@ window.app = function () {
 			}
 		},
 
+		showUnsavedConfirm() {
+			return this.isDirty && !confirm("You have unsaved changes. Continue?");
+		},
+
 		copyBlob() {
 			if (this.newData?.output?.textBlob) {
 				navigator.clipboard.writeText(this.newData.output.textBlob);
@@ -78,6 +82,9 @@ window.app = function () {
 		},
 
 		fileNew() {
+			if (this.showUnsavedConfirm())
+				return;
+
 			this.fileHandle = null;
 
 			const data = newRequest();
@@ -89,6 +96,9 @@ window.app = function () {
 		},
 
 		async fileOpen() {
+			if (this.showUnsavedConfirm())
+				return;
+
 			try {
 				[this.fileHandle] = await window.showOpenFilePicker({
 					types: [{
@@ -165,14 +175,6 @@ window.app = function () {
 
 		get isDirty() {
 			return JSON.stringify(this.newData) !== this.lastSavedSnapshot;
-		},
-
-		get displayFileName() {
-			const name = this.fileHandle == null
-				? '<Untitled>'
-				: this.fileHandle.name;
-
-			return this.isDirty ? `*${name}` : name;
 		},
 	}
 }
