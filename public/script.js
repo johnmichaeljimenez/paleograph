@@ -9,9 +9,6 @@ window.app = function () {
 		tab: 'form',
 
 		fileHandle: null,
-		form: { ...baseData },
-		whitelistString: baseData.whitelist.join("|"),
-		blacklistString: baseData.blacklist.join("|"),
 		newData: { ...baseData },
 		lastSavedSnapshot: JSON.stringify(baseData),
 
@@ -42,7 +39,7 @@ window.app = function () {
 
 			try {
 				this.newData = validateRequest({
-					...this.form,
+					...this.newData,
 					whitelist: this.whitelistString,
 					blacklist: this.blacklistString
 				});
@@ -88,9 +85,6 @@ window.app = function () {
 			this.fileHandle = null;
 
 			const data = newRequest();
-			this.form = { ...data };
-			this.whitelistString = data.whitelist.join("|");
-			this.blacklistString = data.blacklist.join("|");
 			this.newData = { ...data };
 			this.lastSavedSnapshot = JSON.stringify(data);
 		},
@@ -113,11 +107,6 @@ window.app = function () {
 
 				this.newData = parsed;
 				this.lastSavedSnapshot = JSON.stringify(parsed);
-
-				this.form = { ...parsed };
-				this.whitelistString = parsed.whitelist?.join("|") || "";
-				this.blacklistString = parsed.blacklist?.join("|") || "";
-
 				this.showToast(`File loaded: ${this.fileHandle.name}`, "success");
 
 			} catch (error) {
@@ -175,6 +164,26 @@ window.app = function () {
 
 		get isDirty() {
 			return JSON.stringify(this.newData) !== this.lastSavedSnapshot;
+		},
+
+		get whitelistString() {
+			return this.newData.whitelist.join("|");
+		},
+		set whitelistString(value) {
+			this.newData.whitelist = value
+				.split("|")
+				.map(v => v.trim())
+				.filter(Boolean);
+		},
+
+		get blacklistString() {
+			return this.newData.blacklist.join("|");
+		},
+		set blacklistString(value) {
+			this.newData.blacklist = value
+				.split("|")
+				.map(v => v.trim())
+				.filter(Boolean);
 		},
 	}
 }
