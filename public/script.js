@@ -35,6 +35,11 @@ window.app = function () {
 		},
 
 		async run() {
+			if (this.isDirty && this.newData.output?.textBlob?.length > 0) {
+				if (!confirm("You have unsaved changes. Run anyway?"))
+					return;
+			}
+
 			this.loading = true;
 
 			try {
