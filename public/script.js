@@ -85,6 +85,7 @@ window.app = function () {
 			this.whitelistString = data.whitelist.join("|");
 			this.blacklistString = data.blacklist.join("|");
 			this.newData = { ...data };
+			this.lastSavedSnapshot = JSON.stringify(data);
 		},
 
 		async fileOpen() {
@@ -101,6 +102,7 @@ window.app = function () {
 				const parsed = JSON.parse(text);
 
 				this.newData = parsed;
+				this.lastSavedSnapshot = JSON.stringify(parsed);
 
 				this.form = { ...parsed };
 				this.whitelistString = parsed.whitelist?.join("|") || "";
@@ -133,6 +135,7 @@ window.app = function () {
 				);
 
 				await writable.close();
+				this.lastSavedSnapshot = JSON.stringify(this.newData);
 
 				this.showToast(`File saved: ${this.fileHandle.name}`, "success");
 			} catch (error) {
