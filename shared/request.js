@@ -62,7 +62,7 @@ export function validateRequest(req) {
 		'package-lock.json'
 	];
 
-	req.blacklist = [
+	req.outBlacklist = [
 		...new Set([...req.blacklist, ...mandatoryBlacklist])
 	];
 

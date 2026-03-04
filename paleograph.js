@@ -33,7 +33,7 @@ async function processFiles(req) {
 	if (!statSync(realPath).isDirectory())
 		throw new Error("Invalid path (not directory)");
 
-	const allFiles = getFilesRecursively(realPath, realPath, req.blacklist, req.whitelist);
+	const allFiles = getFilesRecursively(realPath, realPath, req.outBlacklist, req.whitelist);
 	console.log(allFiles);
 
 	if (allFiles.length == 0) {
